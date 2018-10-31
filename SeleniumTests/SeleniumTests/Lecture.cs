@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -41,9 +37,6 @@ namespace SeleniumTests
             var elementSearch = driver.FindElement(By.Id("search-field"));
             var text = elementSearch.Text;
             var value = elementSearch.GetAttribute("placeholder");
-
-            //Тренировочные локаторы
-
         }
 
         [TearDown]
