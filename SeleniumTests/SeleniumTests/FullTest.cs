@@ -22,21 +22,11 @@ namespace SeleniumTests
         [Test]
         public void MyFullTest()
         {
-            //Тест с селектором
-            driver.Navigate().GoToUrl("https://www.labirint.ru/guestbook/");
-
-            var writeMessage = driver.FindElement(By.CssSelector("#aone"));
-            var name = driver.FindElement(By.CssSelector("input[name='name']"));
-            var email = driver.FindElement(By.CssSelector("input[name='email']"));
-            var checkbox = driver.FindElement(By.CssSelector("#send_answer"));
-            var theme = driver.FindElement(By.CssSelector("select[name='theme']"));
-            var message = driver.FindElement(By.CssSelector("#guesttextarea"));
-            var send = driver.FindElement(By.CssSelector("input[value='Отправить']"));
-
             //Основной тест
             driver.Navigate().GoToUrl("https://www.labirint.ru");
 
             var menu = driver.FindElement(By.CssSelector("[data-toggle='header - genres']"));
+           
             var allBooks = driver.FindElement(By.CssSelector(".b-menu-second-container [href='/books/']"));
             var firstBookButton = driver.FindElement(By.CssSelector(".btn buy-link btn-primary"));
             var buyButton = driver.FindElement(By.CssSelector("btn buy-link btn-primary btn-more"));
@@ -52,7 +42,7 @@ namespace SeleniumTests
             var nearDay = driver.FindElement(By.CssSelector(".ui-datepicker-week-hol"));
             var done = driver.FindElement(By.CssSelector("[value='Готово']"));
         }
-
+        
         [TearDown]
         public void TearDown()
         {
