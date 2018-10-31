@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Threading;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 
 namespace SeleniumTests
@@ -15,8 +17,11 @@ namespace SeleniumTests
         [SetUp]
         public void SetUp()
         {
-            driver = new ChromeDriver();
+            var options = new ChromeOptions();
+            options.AddArgument("--start-maximized"); // браузер раскрывается на весь экран
+            driver = new ChromeDriver(options);
             wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
         }
 
         [Test]
@@ -25,22 +30,63 @@ namespace SeleniumTests
             //Основной тест
             driver.Navigate().GoToUrl("https://www.labirint.ru");
 
-            var menu = driver.FindElement(By.CssSelector("[data-toggle='header - genres']"));
-           
-            var allBooks = driver.FindElement(By.CssSelector(".b-menu-second-container [href='/books/']"));
-            var firstBookButton = driver.FindElement(By.CssSelector(".btn buy-link btn-primary"));
-            var buyButton = driver.FindElement(By.CssSelector("btn buy-link btn-primary btn-more"));
-            var startBuy = driver.FindElement(By.CssSelector("#basket-default-begin-order"));
-            var courier = driver.FindElement(By.CssSelector("label[class*='b-radio-delivery-courier']"));
-            var city = driver.FindElement(By.CssSelector("input[data-suggeststype='district']"));
-            var validateCity = driver.FindElement(By.CssSelector("#formvalidate-label_jsdistrict_84"));
-            var street = driver.FindElement(By.CssSelector("input[data-suggeststype='streets']"));
-            var house = driver.FindElement(By.CssSelector("#_jsbuilding_84"));
-            var housing = driver.FindElement(By.CssSelector("#b-dlform-m-272-clone [name='corp[272]']"));
-            var apartment = driver.FindElement(By.CssSelector("#b-dlform-m-272-clone [name='flat[272]']"));
-            var code = driver.FindElement(By.CssSelector("#b-dlform-m-272-clone [name='buildingcode[272]']"));
-            var nearDay = driver.FindElement(By.CssSelector(".ui-datepicker-week-hol"));
-            var done = driver.FindElement(By.CssSelector("[value='Готово']"));
+            //Наводим на пункт меню либо через Actions либо через API http://jqueryui.com/menu/
+            new Actions(driver)
+                .MoveToElement(driver.FindElement(By.CssSelector("[data-toggle='header-genres']")))
+                .Build()
+                .Perform();
+
+            //Ждем, когда элемент подменю появится и наводим на него и кликаем по "Все книги"
+            wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(".b-menu-second-container [href='/books/']")));
+            new Actions(driver)
+                .MoveToElement(driver.FindElement(By.CssSelector(".b-menu-second-container [href='/books/']")))
+                .Click()
+                .Build()
+                .Perform();
+
+            //Кликаем у первой книги по кнопке "В корзину"
+            driver.FindElement(By.XPath("(//a[contains(@class,'btn')][contains(@class,'buy-link')][contains(@class,'btn-primary')])[1]")).Click();
+
+            //Кликаем у первой книги по кнопке "Оформить"
+            driver.FindElement(By.XPath("(//a[contains(@class,'btn')][contains(@class,'buy-link')][contains(@class,'btn-primary')][contains(@class,'btn-more')])[1]")).Click();
+
+            //Кликаем по кнопке "Начать оформление"
+            driver.FindElement(By.CssSelector("#basket-default-begin-order")).Click();
+
+            //Выбираем курьерскую доставку
+            driver.FindElement(By.XPath("//*[contains(@data-gaid,'cart_dlcourier')]")).Click();
+
+            //Вводим город некорректный
+            driver.FindElement(By.CssSelector("input[data-suggeststype='district']")).SendKeys("saasdfsdfsdfdffds");
+
+            //Убираем фокус с поля, например, кликаем Tab
+            driver.FindElement(By.CssSelector("input[data-suggeststype='district']")).SendKeys(Keys.Tab);
+
+            //Проверяем, что отобразилась ошибка
+            Assert.IsTrue(driver.FindElement(By.CssSelector("span.b-form-error")).Displayed, "Не появилась ошибка о неизвестном городе");
+
+            //Очищаем поле ввода и вводим город корректный
+            driver.FindElement(By.CssSelector("input[data-suggeststype='district']")).Clear();
+            driver.FindElement(By.CssSelector("input[data-suggeststype='district']")).SendKeys("Екатеринбург");
+            driver.FindElement(By.CssSelector("input[data-suggeststype='district']")).SendKeys(Keys.Enter);
+
+            //Вводим название улицы
+
+            //Упадет так как поле неинтерактивное, так как их всего два таких на странице и первое поле не то
+            //driver.FindElement(By.CssSelector("input[data-suggeststype='streets']")).SendKeys("Ленина");
+            driver.FindElement(By.CssSelector(".js-dlform-wrap input[data-suggeststype='streets']")).SendKeys("Ленина");
+            
+            //Вводим номер дома
+            driver.FindElement(By.CssSelector(".js-dlform-wrap [name^=building]")).SendKeys("1");
+
+            //Вводим номер квартиры
+            driver.FindElement(By.CssSelector(".js-dlform-wrap [name^=flat]")).SendKeys("1");
+
+            //Указываем день доставки
+            (driver as IJavaScriptExecutor).ExecuteScript($"$('.js-dlform-wrap .js-delivery-date').datepicker('setDate','{DateTime.Today.AddDays(8).ToString("dd.MM.yyyy")}')");
+
+            //И кликаем по кнопке "Готово"
+            driver.FindElement(By.CssSelector(".js-dlform-wrap input[type=submit][value=Готово]")).Click();
         }
         
         [TearDown]

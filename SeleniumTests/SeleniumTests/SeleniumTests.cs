@@ -17,7 +17,7 @@ namespace SeleniumTests
         {
             var options = new ChromeOptions();
             options.AddArgument("--start-maximized"); // браузер раскрывается на весь экран
-            driver = new ChromeDriver();
+            driver = new ChromeDriver(options);
             wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
         }
