@@ -45,16 +45,18 @@ namespace SeleniumTests
                 .Perform();
 
             //Кликаем у первой книги по кнопке "В корзину"
-            driver.FindElement(By.XPath("(//a[contains(@class,'btn')][contains(@class,'buy-link')][contains(@class,'btn-primary')])[1]")).Click();
+            driver.FindElement(By.CssSelector(".product-padding a.buy-link")).Click();
 
             //Кликаем у первой книги по кнопке "Оформить"
-            driver.FindElement(By.XPath("(//a[contains(@class,'btn')][contains(@class,'buy-link')][contains(@class,'btn-primary')][contains(@class,'btn-more')])[1]")).Click();
+            //driver.FindElement(By.XPath("(//a[contains(@class,'btn')][contains(@class,'buy-link')][contains(@class,'btn-primary')][contains(@class,'btn-more')])[1]")).Click();
+            driver.FindElement(By.CssSelector(".product-buy-margin a.buy-link")).Click();//по такому локатору все ок в режиме дебагера, потому что времени не хватает, 
+            //здесь можно добавить ожидалку, чтоб ее как раз пройти
 
             //Кликаем по кнопке "Начать оформление"
             driver.FindElement(By.CssSelector("#basket-default-begin-order")).Click();
 
             //Выбираем курьерскую доставку
-            driver.FindElement(By.XPath("//*[contains(@data-gaid,'cart_dlcourier')]")).Click();
+            driver.FindElement(By.CssSelector("[data-gaid='cart_dlcourier']")).Click();
 
             //Вводим город некорректный
             driver.FindElement(By.CssSelector("input[data-suggeststype='district']")).SendKeys("saasdfsdfsdfdffds");
@@ -86,9 +88,9 @@ namespace SeleniumTests
             (driver as IJavaScriptExecutor).ExecuteScript($"$('.js-dlform-wrap .js-delivery-date').datepicker('setDate','{DateTime.Today.AddDays(8).ToString("dd.MM.yyyy")}')");
 
             //И кликаем по кнопке "Готово"
-            driver.FindElement(By.CssSelector(".js-dlform-wrap input[type=submit][value=Готово]")).Click();
+            driver.FindElement(By.CssSelector(".js-dlform-wrap [value=Готово]")).Click();
         }
-        
+
         [TearDown]
         public void TearDown()
         {
