@@ -10,14 +10,13 @@ using OpenQA.Selenium.Support.UI;
 
 namespace SeleniumTests
 {
-    [TestFixture]
     public abstract class SeleniumTestBase
     {
-        protected IWebDriver driver;
-        protected WebDriverWait wait;
+        public static IWebDriver driver;
+        public static WebDriverWait wait;
 
-        [SetUp]
-        protected void SetUp()
+        [OneTimeSetUp]
+        public void SetUp()
         {
             var options = new ChromeOptions();
             options.AddArgument("--start-maximized"); // браузер раскрывается на весь экран
@@ -26,13 +25,13 @@ namespace SeleniumTests
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
         }
 
-        protected void OpenPage(string url)
+        public void OpenPage()
         {
-            driver.Navigate().GoToUrl(url);
+            driver.Navigate().GoToUrl("https://www.labirint.ru/");
         }
 
-        [TearDown]
-        protected void TearDown()
+        [OneTimeTearDown]
+        public void TearDown()
         {
             driver.Quit();
             driver = null;

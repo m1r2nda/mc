@@ -11,12 +11,12 @@ namespace SeleniumTests
     [TestFixture]
     public class FullTest : SeleniumTestBase
     {
+        private static Pages pages = new Pages();
+
         [Test]
         public void MyFullTest()
         {
-            var pages = new Pages();
-
-            pages.AddBookInBasket();
+            pages.AddBook();
             pages.CourierDelivery();
         }
     }
