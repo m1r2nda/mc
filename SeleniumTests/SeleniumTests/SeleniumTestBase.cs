@@ -26,6 +26,11 @@ namespace SeleniumTests
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
         }
 
+        protected void OpenPage(string url)
+        {
+            driver.Navigate().GoToUrl(url);
+        }
+
         [TearDown]
         protected void TearDown()
         {

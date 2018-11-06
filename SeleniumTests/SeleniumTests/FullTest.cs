@@ -14,12 +14,9 @@ namespace SeleniumTests
         [Test]
         public void MyFullTest()
         {
-            driver.Navigate().GoToUrl("https://www.labirint.ru");
-
             var pages = new Pages();
 
             pages.AddBookInBasket();
-            pages.RegOrder();
             pages.CourierDelivery();
         }
     }

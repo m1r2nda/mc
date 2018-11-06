@@ -12,6 +12,7 @@ namespace SeleniumTests
 {
     public class Pages : SeleniumTestBase
     {
+
         private By booksMenu = By.CssSelector("[data-toggle='header-genres']");
         private By allBooks = By.CssSelector(".b-menu-second-container [href='/books/']");
         private By basket = By.CssSelector(".product-padding a.buy-link");
@@ -30,6 +31,8 @@ namespace SeleniumTests
 
         public void AddBookInBasket()
         {
+            OpenPage("https://www.labirint.ru");
+
             //Наводим на пункт меню либо через Actions либо через API http://jqueryui.com/menu/
             new Actions(driver)
                 .MoveToElement(driver.FindElement(booksMenu))
@@ -45,10 +48,6 @@ namespace SeleniumTests
                 .Perform();
 
             driver.FindElement(basket).Click();
-        }
-
-        public void RegOrder()
-        {
             driver.FindElement(issue).Click();
             driver.FindElement(beginOrder).Click();
         }
