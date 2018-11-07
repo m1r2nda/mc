@@ -15,7 +15,7 @@ namespace SeleniumTests
         public static IWebDriver driver;
         public static WebDriverWait wait;
 
-        [OneTimeSetUp]
+        [SetUp]
         public void SetUp()
         {
             var options = new ChromeOptions();
@@ -25,12 +25,7 @@ namespace SeleniumTests
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
         }
 
-        public void OpenPage()
-        {
-            driver.Navigate().GoToUrl("https://www.labirint.ru/");
-        }
-
-        [OneTimeTearDown]
+        [TearDown]
         public void TearDown()
         {
             driver.Quit();

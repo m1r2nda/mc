@@ -51,11 +51,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AllBooksPage.cs" />
-    <Compile Include="CourierDeliveryPage.cs" />
+    <Compile Include="Pages\BasketPage.cs" />
+    <Compile Include="Pages\HomePage.cs" />
+    <Compile Include="Pages\CourierDeliveryLightbox.cs" />
     <Compile Include="FullTest.cs" />
     <Compile Include="Lecture.cs" />
-    <Compile Include="Pages.cs" />
     <Compile Include="SeleniumTestBase.cs" />
     <Compile Include="SeleniumTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
