@@ -35,7 +35,7 @@ namespace SeleniumTests
             var allProducts =
                 By.XPath(
                     "(//form[contains(@name, 'form-navisort')]//span[contains(@class, 'sorting-value menu-open')])[1]");//на странице рейтинги кнопка Все товары
-            var notDiscount = driver.FindElement(By.CssSelector("div.product-padding:not(.action-label__text)"));//книги без скидок
+            var notDiscount = By.CssSelector("div.product-padding:not(.action-label__text)");//книги без скидок
             var year = By.CssSelector("select[name='year_begin'] >option[value='2017']");//на странице Вопрос ответ в селекте во вкладке Поиск в архиве найти 2017 год в начале периода поиска
             var lefttext = By.CssSelector("a[class^=single-block]");//На странице https://www.labirint.ru/guestbook/ найти все ссылки-заголовки в левом блоке - где способы оплаты и тд
         }
